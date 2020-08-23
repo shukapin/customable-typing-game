@@ -1,6 +1,5 @@
 var question;
 var time_limit = 90;
-var score;
 var correct;
 var mistake;
 var char_num = 0;
@@ -23,7 +22,7 @@ function ready() {
 }
 
 function saveTexts() {
-    question = document.getElementById("input_texts").value.split('\n');
+    question = document.getElementById("input_texts").value.replace(/’/g, '\'').replace(/—/g, '-').split('\n');
     console.log("question: " + question[1]);
 }
 
@@ -53,8 +52,9 @@ function charInsort(){
 }
 
 function finish(){
-    score = Math.floor(Math.pow(correct,2) * Math.pow((correct/(correct+mistake)),5));
-    scoredis.innerHTML= "<hr>" +score+"点"+"<br>correct types: "+correct+"<br>mistakes: "+mistake+"<br>correct ratio: "+(correct/(correct+mistake)*100).toFixed(1)+"%";
+    var score = Math.floor(Math.pow(correct,2) * Math.pow((correct/(correct+mistake)),5));
+    var wpm = Math.floor( correct / time_limit * 60 / 5 );
+    scoredis.innerHTML= "<hr>Score: " +score+"<br>WPM: "+ wpm +"<br>correct types: "+correct+"<br>mistakes: "+mistake+"<br>correct ratio: "+(correct/(correct+mistake)*100).toFixed(1)+"%";
     count.innerHTML="";
     word.innerHTML="";
     start_menu.style.visibility ="visible";
