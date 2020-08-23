@@ -5,7 +5,7 @@ var correct;
 var mistake;
 var char_num = 0;
 var word_char;
-var line_cnt;
+var line_cnt = 0;
 
 function ready() {
     saveTexts();
@@ -23,9 +23,8 @@ function ready() {
 }
 
 function saveTexts() {
-    question = document.getElementById("input_texts").value;
-    //.value.split('\n');
-    console.log("question: " + question);
+    question = document.getElementById("input_texts").value.split('\n');
+    console.log("question: " + question[1]);
 }
 
 function gameStart() {
@@ -35,7 +34,7 @@ function gameStart() {
     wordDisplay();
     var time_remaining = time_limit;
     var gametimer = setInterval(function(){
-       count.innerHTML="Remain TIme: "+time_remaining;
+       count.innerHTML="Remain Time: "+time_remaining;
         time_remaining--;
         if(time_remaining <= 0){
         clearInterval(gametimer);
@@ -45,20 +44,20 @@ function gameStart() {
 }
 
 function wordDisplay(){
-    word.innerHTML = question;
+    word.innerHTML = question[line_cnt];
     charInsort();
 }
 
 function charInsort(){
-    word_char = question.charAt(char_num);
+    word_char = question[line_cnt].charAt(char_num);
 }
 
 function finish(){
     score = Math.floor(Math.pow(correct,2) * Math.pow((correct/(correct+mistake)),5));
-    scoredis.innerHTML=":"+score+"点"+"<hr>correct types:"+correct+"<br>mistakes:"+mistake+"<br>correct ratio"+(correct/(correct+mistake)*100).toFixed(1)+"%";
+    scoredis.innerHTML= "<hr>" +score+"点"+"<br>correct types: "+correct+"<br>mistakes: "+mistake+"<br>correct ratio: "+(correct/(correct+mistake)*100).toFixed(1)+"%";
     count.innerHTML="";
     word.innerHTML="";
-    start_button.style.visibility ="visible";
+    start_menu.style.visibility ="visible";
     word_char=0;
     line_cnt = 0;
     char_num = 0;
@@ -68,10 +67,10 @@ document.onkeydown = function(event) {
         keyStr = event.key;
         console.log("keyStr: " + keyStr);
         console.log("word_char: " + word_char);
-        console.log("question: " + question);
+        console.log("question.length : " + question.length);
 
     if(keyStr == word_char){
-        word.innerHTML="<span style='color: red;'>"+question.substr(0,char_num+1)+"</span>"+question.substr(char_num+1,question.length);
+        word.innerHTML="<span style='color: red;'>"+question[line_cnt].substr(0,char_num+1)+"</span>"+question[line_cnt].substr(char_num+1,question[line_cnt].length);
         char_num++;
         correct++;
         charInsort();
@@ -79,8 +78,13 @@ document.onkeydown = function(event) {
         mistake++;
     }
 
-    if(char_num == question.length){
+    if(char_num == question[line_cnt].length){
         char_num=0;
+        if (line_cnt < question.length-1) {
+            line_cnt++;
+        } else {
+            line_cnt = 0;
+        }
         wordDisplay();
     }
 };
