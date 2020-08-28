@@ -1,5 +1,5 @@
 var question;
-var time_limit = 90;
+var time_limit = 10;
 var correct;
 var mistake;
 var char_num = 0;
@@ -9,6 +9,7 @@ var line_cnt = 0;
 function ready() {
     saveTexts();
     readytime = 3;
+    time_limit = document.getElementById("time").value;
     scoredis.innerHTML="";
     start_menu.style.visibility ="hidden";
     var readytimer = setInterval(function(){
@@ -22,8 +23,12 @@ function ready() {
 }
 
 function saveTexts() {
-    question = document.getElementById("input_texts").value.replace(/’/g, '\'').replace(/—/g, '-').split('\n');
-    console.log("question: " + question[1]);
+    question = document.getElementById("input_texts")
+        .value.replace(/’/g, '\'')
+        .replace(/—/g, '-')
+        .replace(/[“”]/g, '"')
+        .replace(/[^A-Za-z0-9%,\ \-"'.]/g, '_')
+        .split('\n');
 }
 
 function gameStart() {
